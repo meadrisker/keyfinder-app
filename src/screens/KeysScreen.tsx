@@ -37,7 +37,7 @@ export default function KeysScreen() {
       onLongPress={() => confirmDelete(item)}
     >
       <View style={styles.svgWrapper}>
-        <KeySvg svg={item.svg} size={64} />
+        <KeySvg svg={item.svg_front} size={28} />
       </View>
       <View style={styles.cardBody}>
         <Text style={styles.cardName}>{item.name}</Text>

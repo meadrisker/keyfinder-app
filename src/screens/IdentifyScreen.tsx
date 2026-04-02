@@ -87,7 +87,7 @@ export default function IdentifyScreen() {
               </View>
 
               <View style={styles.svgRow}>
-                <KeySvg svg={result.key.svg} size={120} />
+                <KeySvg svg={result.key.svg_front} size={50} />
               </View>
 
               <Text style={styles.matchName}>{result.key.name}</Text>

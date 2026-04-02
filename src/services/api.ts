@@ -6,7 +6,7 @@ const BASE_URL = 'https://keyfinder.meadriskersoftware.com';
 export const api = axios.create({
   baseURL: `${BASE_URL}/keyring`,
   headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-  timeout: 30000,
+  timeout: 60000, // longer timeout for two-image analysis
 });
 
 api.interceptors.request.use(async (config) => {
@@ -15,7 +15,6 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-// Types
 export interface Device {
   id: number;
   device_uuid: string;
@@ -43,7 +42,8 @@ export interface Key {
   name: string;
   description: string | null;
   keywords: KeyKeywords | null;
-  svg: string | null;
+  svg_front: string | null;
+  svg_back: string | null;
   added_by: string;
   created_at: string;
 }
@@ -66,28 +66,22 @@ export interface AuthResponse {
   household: Household;
 }
 
-// Auth
 export const authApi = {
   register: (device_uuid: string, device_name: string) =>
     api.post<AuthResponse>('/auth/register', { device_uuid, device_name }),
-
   join: (device_uuid: string, device_name: string, invite_code: string) =>
     api.post<AuthResponse>('/auth/join', { device_uuid, device_name, invite_code }),
-
   invite: () =>
     api.post<{ invite_code: string; expires: string }>('/auth/invite'),
-
   me: () =>
     api.get<{ device: Device; household: Household }>('/auth/me'),
-
   logout: () => api.post('/auth/logout'),
 };
 
-// Keys
 export const keysApi = {
   list: (page = 1) => api.get<PaginatedKeys>('/keys', { params: { page } }),
-  store: (name: string, image: string, description?: string) =>
-    api.post<Key>('/keys', { name, image, description }),
+  store: (name: string, image_front: string, image_back: string, description?: string) =>
+    api.post<Key>('/keys', { name, image_front, image_back, description }),
   update: (id: number, data: { name?: string; description?: string }) =>
     api.put<Key>(`/keys/${id}`, data),
   destroy: (id: number) => api.delete(`/keys/${id}`),

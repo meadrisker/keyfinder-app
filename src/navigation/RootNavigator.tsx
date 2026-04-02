@@ -12,16 +12,16 @@ import CameraScreen     from '../screens/CameraScreen';
 import IdentifyScreen   from '../screens/IdentifyScreen';
 import SettingsScreen   from '../screens/SettingsScreen';
 
-const Tab   = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const Tab        = createBottomTabNavigator();
+const RootStack  = createStackNavigator();
+const KeysStack  = createStackNavigator();
 
-function KeysStack() {
+function KeysNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#fff' }, headerTintColor: '#0f6e56' }}>
-      <Stack.Screen name="KeysList" component={KeysScreen} options={{ title: 'My Keys' }} />
-      <Stack.Screen name="AddKey" component={AddKeyScreen} options={{ title: 'Add Key', presentation: 'modal' }} />
-      <Stack.Screen name="Camera" component={CameraScreen} options={{ headerShown: false, presentation: 'fullScreenModal' }} />
-    </Stack.Navigator>
+    <KeysStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#fff' }, headerTintColor: '#0f6e56' }}>
+      <KeysStack.Screen name="KeysList" component={KeysScreen} options={{ title: 'My Keys' }} />
+      <KeysStack.Screen name="AddKey"   component={AddKeyScreen} options={{ title: 'Add Key', presentation: 'modal' }} />
+    </KeysStack.Navigator>
   );
 }
 
@@ -36,10 +36,19 @@ function AppTabs() {
         headerTintColor:         '#0f6e56',
       }}
     >
-      <Tab.Screen name="Keys"     component={KeysStack}     options={{ headerShown: false, tabBarLabel: 'Keys' }} />
+      <Tab.Screen name="Keys"     component={KeysNavigator}  options={{ headerShown: false, tabBarLabel: 'Keys' }} />
       <Tab.Screen name="Identify" component={IdentifyScreen} options={{ title: 'Identify' }} />
       <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Settings' }} />
     </Tab.Navigator>
+  );
+}
+
+function AppRoot() {
+  return (
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      <RootStack.Screen name="Tabs"   component={AppTabs} />
+      <RootStack.Screen name="Camera" component={CameraScreen} options={{ presentation: 'fullScreenModal' }} />
+    </RootStack.Navigator>
   );
 }
 
@@ -58,7 +67,7 @@ export default function RootNavigator() {
 
   return (
     <NavigationContainer>
-      {token ? <AppTabs /> : <OnboardingScreen />}
+      {token ? <AppRoot /> : <OnboardingScreen />}
     </NavigationContainer>
   );
 }

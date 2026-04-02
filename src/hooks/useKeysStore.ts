@@ -10,7 +10,7 @@ interface KeysState {
   total: number;
   fetchKeys: (page?: number) => Promise<void>;
   refreshKeys: () => Promise<void>;
-  addKey: (name: string, image: string, description?: string) => Promise<Key>;
+  addKey: (name: string, imageFront: string, imageBack: string, description?: string) => Promise<Key>;
   updateKey: (id: number, data: { name?: string; description?: string }) => Promise<void>;
   deleteKey: (id: number) => Promise<void>;
 }
@@ -48,8 +48,8 @@ export const useKeysStore = create<KeysState>((set, get) => ({
     }
   },
 
-  addKey: async (name, image, description) => {
-    const { data } = await keysApi.store(name, image, description);
+  addKey: async (name, imageFront, imageBack, description) => {
+    const { data } = await keysApi.store(name, imageFront, imageBack, description);
     set((state) => ({ keys: [data, ...state.keys], total: state.total + 1 }));
     return data;
   },
